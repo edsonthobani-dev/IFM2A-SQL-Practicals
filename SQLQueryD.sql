@@ -1,9 +1,16 @@
-USE OnlineBookstore
+USE SSH_Financial
 GO
 
---the names and contact information of all customers who placed an order between 1 January 2025 and 31 March 2025.
-SELECT c.CustomerName , c.CustomerNumber
-FROM Customer c
-JOIN Orderr o
-ON c.CustomerID = o.CustomerID
-WHERE o.DateOrdered BETWEEN '2025-01-01' AND '2025-03-31'
+--Only include consultations scheduled for the next week. 
+SELECT 
+    DATENAME(WEEKDAY, c.ConsultationDate) AS Day,
+    a.FirstName + ' ' + a.LastName AS Financial_Advisor,
+    cl.FirstName + ' ' + cl.LastName AS Client,
+    CONVERT(VARCHAR, c.ConsultationTime, 100) AS Time
+FROM Consultation c
+JOIN Advisor a 
+ON c.AdvisorID = a.AdvisorID
+JOIN Client cl 
+ON c.ClientID = cl.ClientID
+WHERE c.ConsultationDate BETWEEN '2026-05-11' AND '2026-05-17'
+ORDER BY c.ConsultationDate, c.ConsultationTime;
